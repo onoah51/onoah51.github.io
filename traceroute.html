@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>traceroute to isp.example.net</title>
+
+<!-- 2-second pause to enjoy the art, then bounce them onward -->
+<meta http-equiv="refresh" content="8;url=https://your-real-site.example.com">
+
+<style>
+  /* ❱❱ “Matrix-green” terminal look */
+  html,body {margin:0;height:100%;background:#000;color:#0f0;
+              font-family: "Source Code Pro", monospace;}
+  #terminal {padding:20px;white-space:pre-wrap;line-height:1.3;}
+  @keyframes blink {50%{opacity:0;}}
+  .cursor {display:inline-block;width:.7ch;animation:blink 1s step-end infinite;}
+  .hop   {opacity:0;animation:fade .5s forwards;}
+  @keyframes fade {to{opacity:1;}}
+</style>
+</head>
+
+<body>
+<pre id="terminal"></pre>
+
+<script>
+/* Fake hops — replace with anything (funny RFC refs, local router names, etc.) */
+const hops = [
+ 'traceroute to isp.example.net (203.0.113.42), 30 hops max',
+ ' 1  10.0.0.1           0.62 ms  0.41 ms  0.37 ms',
+ ' 2  64.71.106.1      1.12 ms  1.03 ms  0.99 ms',
+ ' 3  216.176.4.177         3.01 ms  2.77 ms  2.54 ms',
+ ' 4  208.115.136.27        8.80 ms  8.57 ms  8.49 ms',
+ ' 5  72.14.205.136      13.74 ms 13.60 ms 13.47 ms',
+ ' 6  198.51.100.198  22.40 ms 22.13 ms 22.05 ms',
+ ' 7  ***',
+ ' 8  osbor.ne    24.01 ms 23.84 ms 23.70 ms',
+ '',                     // blank line
+ 'Trace complete — redirecting ➜'
+];
+
+const term = document.getElementById('terminal');
+let i = 0;
+function nextHop() {
+  if (i < hops.length) {
+    const div = document.createElement('div');
+    div.textContent = hops[i++];
+    div.className = 'hop';
+    term.appendChild(div);
+    setTimeout(nextHop, 400);          // delay between lines
+  } else {
+    const cur = document.createElement('span');
+    cur.className = 'cursor';
+    cur.textContent = '▮';             // blinking block cursor
+    term.appendChild(cur);
+  }
+}
+nextHop();
+</script>
+</body>
+</html>
